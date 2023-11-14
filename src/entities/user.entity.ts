@@ -13,7 +13,7 @@ export class User {
   @Column({ unique: true })
   username: string;
 
-  @CreateDateColumn({ default: Date.now() })
+  @CreateDateColumn({ default: new Date() })
   createdAt: Date;
 
   @Column()

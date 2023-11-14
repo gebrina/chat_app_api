@@ -10,7 +10,8 @@ import { UserModule } from './user/user.module';
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
         autoLoadEntities: true,
-        entities: [],
+        synchronize: true,
+        entities: ['dist/entities/*.entity'],
         host: config.get('DB_HOST'),
         port: config.get('DB_PORT'),
         database: config.get('DB_NAME'),
