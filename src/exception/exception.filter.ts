@@ -18,7 +18,7 @@ export class ExceptionHandler implements ExceptionFilter {
       method: request.method,
       url: request.url,
       status,
-      time: new Date().toLocaleDateString(),
+      time: new Date().toLocaleString(),
       reason: exception?.message,
     });
   }

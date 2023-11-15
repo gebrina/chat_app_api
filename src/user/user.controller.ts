@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from 'src/entities/user.entity';
+import { PublicApi } from 'src/decorators/public-api';
 
 @Controller('users')
 export class UserController {
@@ -12,6 +13,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @PublicApi()
   findOne(@Param('id') id: string): Promise<User> {
     return this.userService.findOne(id);
   }
