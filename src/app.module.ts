@@ -1,16 +1,25 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from './user/user.module';
 import { ExceptionHandler } from './exception/exception.filter';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtAuthGuard } from './auth/jwt.guard';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.SECRET_KEY,
+      signOptions: {
+        expiresIn: '3d',
+      },
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule.forRoot()],
       useFactory: (config: ConfigService) => ({
         type: 'postgres',
         autoLoadEntities: true,
@@ -32,6 +41,10 @@ import { AuthModule } from './auth/auth.module';
     {
       provide: APP_FILTER,
       useClass: ExceptionHandler,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
   ],
 })

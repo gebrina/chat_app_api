@@ -16,6 +16,6 @@ export class User {
   @CreateDateColumn({ default: new Date() })
   createdAt: Date;
 
-  @Column()
+  @Column({ length: 255 })
   password: string;
 }
