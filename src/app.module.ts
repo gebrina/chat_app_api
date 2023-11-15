@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
 import { APP_FILTER } from '@nestjs/core';
+import { PassportModule } from '@nestjs/passport';
+import { UserModule } from './user/user.module';
 import { ExceptionHandler } from './exception/exception.filter';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { ExceptionHandler } from './exception/exception.filter';
       inject: [ConfigService],
     }),
     UserModule,
+    PassportModule,
+    AuthModule,
   ],
   providers: [
     {
