@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
 } from 'typeorm';
+
 import { User } from './user.entity';
 
 @Entity()
@@ -15,7 +16,7 @@ export class Chat {
   @Column({ type: 'text' })
   content: string;
 
-  @CreateDateColumn({ default: new Date() })
+  @CreateDateColumn()
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.chats)

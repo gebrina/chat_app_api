@@ -8,6 +8,7 @@ import { ExceptionHandler } from './exception/exception.filter';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtAuthGuard } from './auth/jwt.guard';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { JwtAuthGuard } from './auth/jwt.guard';
     UserModule,
     PassportModule,
     AuthModule,
+    ChatModule,
   ],
   providers: [
     {
