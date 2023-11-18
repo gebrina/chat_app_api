@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 import { User } from './user.entity';
-import { Room } from 'src/chat/room.entity';
+import { Room } from 'src/entities/room.entity';
 
 @Entity()
 export class Chat {

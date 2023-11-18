@@ -7,7 +7,7 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Chat } from './chat.entity';
-import { Room } from 'src/chat/room.entity';
+import { Room } from 'src/entities/room.entity';
 
 @Entity('users')
 export class User {
