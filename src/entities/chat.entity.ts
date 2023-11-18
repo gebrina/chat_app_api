@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 
 import { User } from './user.entity';
+import { Room } from 'src/chat/room.entity';
 
 @Entity()
 export class Chat {
@@ -21,4 +22,7 @@ export class Chat {
 
   @ManyToOne(() => User, (user) => user.chats)
   user: User;
+
+  @ManyToOne(() => Room, (room) => room.chats)
+  room: Room;
 }

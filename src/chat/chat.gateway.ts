@@ -9,18 +9,27 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 
-@WebSocketGateway({})
+@WebSocketGateway({
+  cors: {
+    origin: '*',
+  },
+})
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('chat')
   handleChat(@MessageBody() chat, @ConnectedSocket() socket: Socket) {
-    socket.emit('chat', chat);
+    socket.join(chat.room);
+    this.server.to(chat.room).emit('chat', chat.message);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handleConnection(client: any) {}
+  handleConnection(client: any) {
+    console.log('someone connected');
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handleDisconnect(client: any) {}
+  handleDisconnect(client: any) {
+    console.log('someone disconnected');
+  }
 }

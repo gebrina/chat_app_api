@@ -4,8 +4,10 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  ManyToMany,
 } from 'typeorm';
 import { Chat } from './chat.entity';
+import { Room } from 'src/chat/room.entity';
 
 @Entity('users')
 export class User {
@@ -21,6 +23,9 @@ export class User {
   @Column({ length: 255 })
   password: string;
 
-  @OneToMany(() => Chat, (chat) => chat.user)
+  @OneToMany(() => Chat, (chat) => chat.user, { eager: true })
   chats: Chat[];
+
+  @ManyToMany(() => Room, (room) => room.users, { eager: true })
+  rooms: Room[];
 }
