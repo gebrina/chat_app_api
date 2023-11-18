@@ -15,7 +15,7 @@ export class Chat {
   id: string;
 
   @Column({ type: 'text' })
-  content: string;
+  message: string;
 
   @CreateDateColumn()
   createdAt: Date;

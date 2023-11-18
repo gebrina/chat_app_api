@@ -8,6 +8,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
+  @PublicApi()
   findAll() {
     return this.userService.findAll();
   }
@@ -19,6 +20,7 @@ export class UserController {
   }
 
   @Post('')
+  @PublicApi()
   create(@Body() user: User): Promise<User> {
     return this.userService.create(user);
   }
