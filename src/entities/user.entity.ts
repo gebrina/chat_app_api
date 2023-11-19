@@ -5,6 +5,7 @@ import {
   Entity,
   OneToMany,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Chat } from './chat.entity';
 import { Room } from 'src/entities/room.entity';
@@ -27,5 +28,6 @@ export class User {
   chats: Chat[];
 
   @ManyToMany(() => Room, (room) => room.users, { eager: true })
+  @JoinTable()
   rooms: Room[];
 }
