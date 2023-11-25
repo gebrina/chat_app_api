@@ -11,6 +11,7 @@ import { Server, Socket } from 'socket.io';
 import { Chat } from 'src/entities/chat.entity';
 import { ChatService } from './chat.service';
 import { RoomService } from 'src/room/room.service';
+import { UserService } from 'src/user/user.service';
 
 @WebSocketGateway({
   cors: {
@@ -21,6 +22,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private chatService: ChatService,
     private roomService: RoomService,
+    private userService: UserService,
   ) {}
 
   @WebSocketServer() server: Server;
@@ -30,15 +32,36 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() roomName: string,
     @ConnectedSocket() socket: Socket,
   ) {
+    const users = roomName.split('-');
+
+    const tempUsers = [];
+    users.forEach(async (u) => {
+      const user = await this.userService.findByUserName(u);
+      if (user) {
+        tempUsers.push(user.id);
+      }
+    });
+
+    await this.roomService.create({
+      name: roomName,
+      users: tempUsers,
+    } as any);
+
     socket.join(roomName);
   }
 
   @SubscribeMessage('message')
-  handleChatMessages(@MessageBody() chat: Chat) {
+  async handleChatMessages(@MessageBody() chat: Chat) {
     const {
       room: { name },
     } = chat;
-    this.server.emit(name, chat);
+    const room = await this.roomService.findRoomByName(name);
+    if (room) {
+      chat.room = room;
+      const { id, ...rest } = chat;
+      await this.chatService.create(rest as Chat);
+      this.server.emit(name, chat);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

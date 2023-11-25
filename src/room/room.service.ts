@@ -15,9 +15,24 @@ export class RoomService {
     return await this.roomRepo.findOneBy({ name });
   }
 
+  counter = 0;
   async create(room: Room) {
-    const foundRoom = this.findRoomByName(room.name);
+    const foundRoom = await this.findRoomByName(room.name);
     if (foundRoom) return;
-    return await this.roomRepo.save(room);
+    this.counter++;
+    if (this.counter === 1) {
+      return await this.roomRepo.save(room);
+    }
+  }
+
+  async update(room: Room, id: string) {
+    let savedRoom = await this.findOne(id);
+    if (!savedRoom) return;
+    savedRoom = room;
+    return await this.roomRepo.save(savedRoom);
+  }
+
+  async findOne(id: string): Promise<Room> {
+    return await this.roomRepo.findOneBy({ id });
   }
 }
