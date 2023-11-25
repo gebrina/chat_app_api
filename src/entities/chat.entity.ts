@@ -20,7 +20,7 @@ export class Chat {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.chats)
+  @ManyToOne(() => User, (user) => user.chats, { eager: true })
   user: User;
 
   @ManyToOne(() => Room, (room) => room.chats)

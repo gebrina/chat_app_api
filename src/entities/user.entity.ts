@@ -24,7 +24,7 @@ export class User {
   @Column({ length: 255 })
   password: string;
 
-  @OneToMany(() => Chat, (chat) => chat.user, { eager: true })
+  @OneToMany(() => Chat, (chat) => chat.user)
   chats: Chat[];
 
   @ManyToMany(() => Room, (room) => room.users, { eager: true })
