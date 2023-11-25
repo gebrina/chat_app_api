@@ -8,6 +8,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { Chat } from 'src/entities/chat.entity';
 
 @WebSocketGateway({
   cors: {
@@ -18,15 +19,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
   @SubscribeMessage('init-chat')
-  handleChat(@MessageBody() msg, @ConnectedSocket() socket: Socket) {
-    console.log(socket.id);
+  async handleChat(
+    @MessageBody() roomName: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    socket.join(roomName);
   }
 
-  handleConnection(client: any) {
-    console.log(client);
+  @SubscribeMessage('message')
+  handleChatMessages(@MessageBody() chat: Chat) {
+    const {
+      room: { name },
+    } = chat;
+    this.server.emit(name, chat);
   }
 
-  handleDisconnect(client: any) {
-    console.log(client);
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleConnection(client: any) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  handleDisconnect(client: any) {}
 }
