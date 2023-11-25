@@ -6,4 +6,12 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ChatService {
   constructor(@InjectRepository(Chat) private chatRepo: Repository<Chat>) {}
+
+  async find(): Promise<Chat[]> {
+    return await this.chatRepo.find();
+  }
+
+  async create(chat: Chat): Promise<Chat> {
+    return await this.chatRepo.save(chat);
+  }
 }
