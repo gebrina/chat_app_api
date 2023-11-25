@@ -7,6 +7,7 @@ import { Room } from 'src/entities/room.entity';
 import { RoomModule } from 'src/room/room.module';
 import { ChatService } from './chat.service';
 import { UserModule } from 'src/user/user.module';
+import { ChatController } from './chat.controller';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from 'src/user/user.module';
     RoomModule,
     UserModule,
   ],
+  controllers: [ChatController],
   providers: [ChatGateway, ChatService],
 })
 export class ChatModule {}
