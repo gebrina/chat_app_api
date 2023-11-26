@@ -71,6 +71,14 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     socket.broadcast.to(roomName).emit('typing', 'typing');
   }
+
+  @SubscribeMessage('end-chat')
+  handleEndChat(
+    @MessageBody() roomName: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    socket.leave(roomName);
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleConnection(client: any) {}
 
