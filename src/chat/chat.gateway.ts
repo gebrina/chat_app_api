@@ -13,6 +13,8 @@ import { ChatService } from './chat.service';
 import { RoomService } from 'src/room/room.service';
 import { UserService } from 'src/user/user.service';
 
+const activeUsers = [];
+
 @WebSocketGateway({
   cors: {
     origin: '*',
@@ -79,6 +81,18 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     socket.leave(roomName);
   }
+
+  @SubscribeMessage('online')
+  async handleOnlineStatus(
+    @MessageBody() username: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    username && !activeUsers.includes(username) && activeUsers.push(username);
+    setInterval(() => {
+      socket.emit('online', activeUsers);
+    }, 1000);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleConnection(client: any) {}
 
